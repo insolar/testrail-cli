@@ -8,7 +8,7 @@ import (
 func TestExample(t *testing.T) {
 	t.Parallel()
 	time.Sleep(100 * time.Millisecond)
-	t.Log("C3605 Pass test")
+	t.Log("C3605 Pass testsdf")
 }
 
 func TestExample2(t *testing.T) {

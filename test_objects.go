@@ -9,10 +9,11 @@ import (
 
 // TestObject represents data required for testrail run result
 type TestObject struct {
-	Status   string
-	CaseID   int
-	Desc     string
-	IssueURL string
+	Status     string
+	CaseID     int
+	Desc       string
+	GoTestName string
+	IssueURL   string
 }
 
 // TestEvent go test2json event object
@@ -32,9 +33,9 @@ func (m *TestRail) EventsToTestObjects(events map[string][]*TestEvent) []*TestOb
 		t := &TestObject{}
 		for _, e := range eventsBatch {
 			if e.Action == "output" {
+				t.GoTestName = e.Test
 				res := testCaseIdRe.FindAllStringSubmatch(e.Output, -1)
 				if len(res) != 0 && len(res[0]) == 3 {
-					log.Printf("res case id: %s\n", res)
 					d, err := strconv.Atoi(res[0][1])
 					if err != nil {
 						log.Fatal(err)
@@ -44,12 +45,10 @@ func (m *TestRail) EventsToTestObjects(events map[string][]*TestEvent) []*TestOb
 				}
 				res = testStatusRe.FindAllStringSubmatch(e.Output, -1)
 				if len(res) != 0 && len(res[0]) == 2 {
-					log.Printf("res status: %s\n", res[0][1])
 					t.Status = res[0][1]
 				}
 				res = testIssueRe.FindAllStringSubmatch(e.Output, -1)
 				if len(res) != 0 && len(res[0]) == 2 {
-					log.Printf("issue status: %s\n", res)
 					t.IssueURL = res[0][1]
 				}
 			}
@@ -114,8 +113,8 @@ func (m *TestRail) TestObjectsToSendableResultsForCase(objs []*TestObject) testr
 	return sendableResults
 }
 
-// UntestedResults generate payload to set all test rail run results to UNTESTED
-func (m *TestRail) UntestedResults(cases []*CaseWithDesc) testrail.SendableResultsForCase {
+// NAResults generate payload to set all test rail run results to UNTESTED
+func (m *TestRail) NAResults(cases []*CaseWithDesc) testrail.SendableResultsForCase {
 	results := make([]testrail.ResultsForCase, 0)
 	for _, c := range cases {
 		result := testrail.ResultsForCase{
@@ -146,7 +145,12 @@ func FilterValidTests(objs []*TestObject, cases []*CaseWithDesc) []*TestObject {
 			if o.CaseID == c.CaseID {
 				found = true
 				if o.Desc != c.Desc {
-					log.Printf("case description doesn't match, skipping:\nhas: %s\nwant:%s\n", o.Desc, c.Desc)
+					log.Printf(
+						"case description doesn't match, skipping:\ntest: %s\nhas: %s\nwant: %s\n",
+						o.GoTestName,
+						o.Desc,
+						c.Desc,
+					)
 					continue
 				}
 				filteredObjs = append(filteredObjs, o)

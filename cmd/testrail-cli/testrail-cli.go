@@ -36,7 +36,9 @@ func main() {
 	t := tr.NewTestRail(*url, *user, *pass)
 	run := t.GetRun(*runId)
 	casesWithDescs := t.GetCasesWithDescs(run.ProjectID, run.SuiteID)
-	untested := t.UntestedResults(casesWithDescs)
+	// update all cases with N/A status, we store all autotests in ONE run, so in case
+	// someone delete particular case implementation status must be updated to N/A
+	untested := t.NAResults(casesWithDescs)
 	t.UpdateRunForCases(*runId, untested)
 
 	testEventsBatch := t.GroupEventsByTest(events)
