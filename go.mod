@@ -1,4 +1,4 @@
-module testrail-cli
+module testrailcli
 
 go 1.12
 
