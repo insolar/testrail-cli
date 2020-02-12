@@ -2,10 +2,10 @@ package main
 
 import (
 	"flag"
+	tr "github.com/insolar/testrail-cli"
 	"io"
 	"log"
 	"os"
-	tr "testrail-cli"
 )
 
 func main() {
