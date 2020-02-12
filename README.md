@@ -12,5 +12,5 @@ go install cmd/testrail-cli/testrail-cli.go
 | -r            | testrail run id   |
 
 ```
-go test ./... -json | testrail-cli -u ${testrail_user} -p ${testraul_token} -r 57
+go test ./... -json | testrail-cli -u ${testrail_user} -p ${testrail_token} -r 57
 ```
