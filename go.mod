@@ -1,4 +1,4 @@
-module testrail-cli
+module github.com/insolar/testrail-cli
 
 go 1.12
 
