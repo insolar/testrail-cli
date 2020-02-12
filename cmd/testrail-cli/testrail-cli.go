@@ -13,11 +13,11 @@ func main() {
 	user := flag.String("u", "autotest@insolar.io", "testrail username")
 	pass := flag.String("p", "", "testrail password/token")
 	file := flag.String("f", "", "go test json file")
-	runId := flag.Int("run_id", 0, "testrail run id")
+	runId := flag.Int("r", 0, "testrail run id")
 	flag.Parse()
 
 	if *runId == 0 {
-		log.Fatal("provide run id, ex.: -run_id 54")
+		log.Fatal("provide run id, ex.: -r 54")
 	}
 
 	var stream io.Reader
