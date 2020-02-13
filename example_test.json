@@ -1,31 +1,31 @@
-{"Time":"2020-02-12T17:19:41.937646+03:00","Action":"output","Package":"testrail-cli","Output":"?   \ttestrail-cli\t[no test files]\n"}
-{"Time":"2020-02-12T17:19:41.937948+03:00","Action":"skip","Package":"testrail-cli","Elapsed":0}
-{"Time":"2020-02-12T17:19:41.961866+03:00","Action":"output","Package":"testrail-cli/cmd","Output":"?   \ttestrail-cli/cmd\t[no test files]\n"}
-{"Time":"2020-02-12T17:19:41.961914+03:00","Action":"skip","Package":"testrail-cli/cmd","Elapsed":0}
-{"Time":"2020-02-12T17:19:42.09168+03:00","Action":"run","Package":"testrail-cli/package1","Test":"TestExample"}
-{"Time":"2020-02-12T17:19:42.091731+03:00","Action":"output","Package":"testrail-cli/package1","Test":"TestExample","Output":"=== RUN   TestExample\n"}
-{"Time":"2020-02-12T17:19:42.091744+03:00","Action":"output","Package":"testrail-cli/package1","Test":"TestExample","Output":"=== PAUSE TestExample\n"}
-{"Time":"2020-02-12T17:19:42.091752+03:00","Action":"pause","Package":"testrail-cli/package1","Test":"TestExample"}
-{"Time":"2020-02-12T17:19:42.09176+03:00","Action":"run","Package":"testrail-cli/package1","Test":"TestExample2"}
-{"Time":"2020-02-12T17:19:42.09177+03:00","Action":"output","Package":"testrail-cli/package1","Test":"TestExample2","Output":"=== RUN   TestExample2\n"}
-{"Time":"2020-02-12T17:19:42.091777+03:00","Action":"output","Package":"testrail-cli/package1","Test":"TestExample2","Output":"=== PAUSE TestExample2\n"}
-{"Time":"2020-02-12T17:19:42.091784+03:00","Action":"pause","Package":"testrail-cli/package1","Test":"TestExample2"}
-{"Time":"2020-02-12T17:19:42.091795+03:00","Action":"run","Package":"testrail-cli/package1","Test":"TestExample3"}
-{"Time":"2020-02-12T17:19:42.091803+03:00","Action":"output","Package":"testrail-cli/package1","Test":"TestExample3","Output":"=== RUN   TestExample3\n"}
-{"Time":"2020-02-12T17:19:42.59283+03:00","Action":"output","Package":"testrail-cli/package1","Test":"TestExample3","Output":"--- SKIP: TestExample3 (0.50s)\n"}
-{"Time":"2020-02-12T17:19:42.592909+03:00","Action":"output","Package":"testrail-cli/package1","Test":"TestExample3","Output":"    example_test.go:23: C3607 Skip test\n"}
-{"Time":"2020-02-12T17:19:42.592929+03:00","Action":"output","Package":"testrail-cli/package1","Test":"TestExample3","Output":"    example_test.go:24: issue: https://insolar.atlassian.net/browse/OPS-8 some bad desc\n"}
-{"Time":"2020-02-12T17:19:42.592949+03:00","Action":"skip","Package":"testrail-cli/package1","Test":"TestExample3","Elapsed":0.5}
-{"Time":"2020-02-12T17:19:42.59296+03:00","Action":"cont","Package":"testrail-cli/package1","Test":"TestExample"}
-{"Time":"2020-02-12T17:19:42.59297+03:00","Action":"output","Package":"testrail-cli/package1","Test":"TestExample","Output":"=== CONT  TestExample\n"}
-{"Time":"2020-02-12T17:19:42.592978+03:00","Action":"cont","Package":"testrail-cli/package1","Test":"TestExample2"}
-{"Time":"2020-02-12T17:19:42.592987+03:00","Action":"output","Package":"testrail-cli/package1","Test":"TestExample2","Output":"=== CONT  TestExample2\n"}
-{"Time":"2020-02-12T17:19:42.694115+03:00","Action":"output","Package":"testrail-cli/package1","Test":"TestExample","Output":"--- PASS: TestExample (0.10s)\n"}
-{"Time":"2020-02-12T17:19:42.69419+03:00","Action":"output","Package":"testrail-cli/package1","Test":"TestExample","Output":"    example_test.go:11: C9999 Pass test\n"}
-{"Time":"2020-02-12T17:19:42.896534+03:00","Action":"pass","Package":"testrail-cli/package1","Test":"TestExample","Elapsed":0.1}
-{"Time":"2020-02-12T17:19:42.896625+03:00","Action":"output","Package":"testrail-cli/package1","Test":"TestExample2","Output":"--- FAIL: TestExample2 (0.30s)\n"}
-{"Time":"2020-02-12T17:19:42.896649+03:00","Action":"output","Package":"testrail-cli/package1","Test":"TestExample2","Output":"    example_test.go:17: C3606 Fail test\n"}
-{"Time":"2020-02-12T17:19:42.896664+03:00","Action":"fail","Package":"testrail-cli/package1","Test":"TestExample2","Elapsed":0.3}
-{"Time":"2020-02-12T17:19:42.896679+03:00","Action":"output","Package":"testrail-cli/package1","Output":"FAIL\n"}
-{"Time":"2020-02-12T17:19:42.897482+03:00","Action":"output","Package":"testrail-cli/package1","Output":"FAIL\ttestrail-cli/package1\t0.811s\n"}
-{"Time":"2020-02-12T17:19:42.897566+03:00","Action":"fail","Package":"testrail-cli/package1","Elapsed":0.811}
+{"Time":"2020-02-13T09:40:18.258117+03:00","Action":"output","Package":"github.com/insolar/testrail-cli","Output":"?   \tgithub.com/insolar/testrail-cli\t[no test files]\n"}
+{"Time":"2020-02-13T09:40:18.258377+03:00","Action":"skip","Package":"github.com/insolar/testrail-cli","Elapsed":0}
+{"Time":"2020-02-13T09:40:18.2873+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/cmd/testrail-cli","Output":"?   \tgithub.com/insolar/testrail-cli/cmd/testrail-cli\t[no test files]\n"}
+{"Time":"2020-02-13T09:40:18.287335+03:00","Action":"skip","Package":"github.com/insolar/testrail-cli/cmd/testrail-cli","Elapsed":0}
+{"Time":"2020-02-13T09:40:18.402649+03:00","Action":"run","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample"}
+{"Time":"2020-02-13T09:40:18.402693+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample","Output":"=== RUN   TestExample\n"}
+{"Time":"2020-02-13T09:40:18.402712+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample","Output":"=== PAUSE TestExample\n"}
+{"Time":"2020-02-13T09:40:18.402719+03:00","Action":"pause","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample"}
+{"Time":"2020-02-13T09:40:18.402726+03:00","Action":"run","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample2"}
+{"Time":"2020-02-13T09:40:18.402733+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample2","Output":"=== RUN   TestExample2\n"}
+{"Time":"2020-02-13T09:40:18.402744+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample2","Output":"=== PAUSE TestExample2\n"}
+{"Time":"2020-02-13T09:40:18.402751+03:00","Action":"pause","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample2"}
+{"Time":"2020-02-13T09:40:18.402762+03:00","Action":"run","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample3"}
+{"Time":"2020-02-13T09:40:18.402768+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample3","Output":"=== RUN   TestExample3\n"}
+{"Time":"2020-02-13T09:40:18.905991+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample3","Output":"--- SKIP: TestExample3 (0.50s)\n"}
+{"Time":"2020-02-13T09:40:18.906113+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample3","Output":"    example_test.go:23: C3607 Skip test\n"}
+{"Time":"2020-02-13T09:40:18.906141+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample3","Output":"    example_test.go:24: issue: https://insolar.atlassian.net/browse/OPS-8 some bad desc\n"}
+{"Time":"2020-02-13T09:40:18.906184+03:00","Action":"skip","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample3","Elapsed":0.5}
+{"Time":"2020-02-13T09:40:18.906213+03:00","Action":"cont","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample"}
+{"Time":"2020-02-13T09:40:18.906234+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample","Output":"=== CONT  TestExample\n"}
+{"Time":"2020-02-13T09:40:18.906274+03:00","Action":"cont","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample2"}
+{"Time":"2020-02-13T09:40:18.906292+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample2","Output":"=== CONT  TestExample2\n"}
+{"Time":"2020-02-13T09:40:19.006721+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample","Output":"--- PASS: TestExample (0.10s)\n"}
+{"Time":"2020-02-13T09:40:19.006813+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample","Output":"    example_test.go:11: C3605 Pass testsdf\n"}
+{"Time":"2020-02-13T09:40:19.20622+03:00","Action":"pass","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample","Elapsed":0.1}
+{"Time":"2020-02-13T09:40:19.206282+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample2","Output":"--- FAIL: TestExample2 (0.30s)\n"}
+{"Time":"2020-02-13T09:40:19.206328+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample2","Output":"    example_test.go:17: C3606 Fail test\n"}
+{"Time":"2020-02-13T09:40:19.206342+03:00","Action":"fail","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample2","Elapsed":0.3}
+{"Time":"2020-02-13T09:40:19.206353+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Output":"FAIL\n"}
+{"Time":"2020-02-13T09:40:19.206949+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Output":"FAIL\tgithub.com/insolar/testrail-cli/package1\t0.809s\n"}
+{"Time":"2020-02-13T09:40:19.206994+03:00","Action":"fail","Package":"github.com/insolar/testrail-cli/package1","Elapsed":0.809}

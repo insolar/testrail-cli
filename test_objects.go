@@ -146,7 +146,7 @@ func FilterValidTests(objs []*TestObject, cases []*CaseWithDesc) []*TestObject {
 				found = true
 				if o.Desc != c.Desc {
 					log.Printf(
-						"case description doesn't match, skipping:\ntest: %s\nhas: %s\nwant: %s\n",
+						"case description doesn't match, N/A status will be sent:\ntest: %s\nhas: %s\nwant: %s\n",
 						o.GoTestName,
 						o.Desc,
 						c.Desc,
