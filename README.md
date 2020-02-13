@@ -35,7 +35,7 @@ func TestExample3(t *testing.T) {
 | Param key     | Value             |
 | ------------- | ----------------- |
 | --URL         | testrail url      |
-| --USER        | testrail user .   |
+| --USER        | testrail user     |
 | --PASSWORD    | testrail password |
 | --RUN_ID      | testrail run id   |
 | --FILE        | go test json file |
