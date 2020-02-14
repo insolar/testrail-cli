@@ -20,8 +20,9 @@ var (
 		"SKIP": 6,
 	}
 	testStatusRe = regexp.MustCompile(`--- (.*):`)
-	testIssueRe  = regexp.MustCompile(`.*issue:\s(.*?)\s`)
-	testCaseIdRe = regexp.MustCompile(`C(\d{1,8})\s(.*)`)
+	//testSkipIssueRe = regexp.MustCompile(`.*issue:\s(.*?)\s`)
+	testSkipIssueRe = regexp.MustCompile(`insolar\.atlassian\.net/browse/([A-Z]+-\d+)`)
+	testCaseIdRe    = regexp.MustCompile(`C(\d{1,8})\s(.*)`)
 )
 
 type TestRail struct {

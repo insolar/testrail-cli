@@ -12,13 +12,21 @@ import (
 	"time"
 )
 
-// TestObject represents data required for testrail run result
-type TestObject struct {
+// TestMatcher represents data differences between implementation and testrail case
+type TestMatcher struct {
 	Status     string
 	CaseID     int
 	Desc       string
+	TRDesc     string
 	GoTestName string
 	IssueURL   string
+}
+
+type TestObjectSummary struct {
+	Valid          []*TestMatcher
+	NotFound       []*TestMatcher
+	WrongDesc      []*TestMatcher
+	SkippedNoIssue []*TestMatcher
 }
 
 // TestEvent go test2json event object
@@ -32,10 +40,10 @@ type TestEvent struct {
 }
 
 // EventsToTestObjects parses event batches to construct TestObjects, extracting caseID, Description, Status and IssueURL
-func (m *TestRail) EventsToTestObjects(events map[string][]*TestEvent) []*TestObject {
-	tests := make([]*TestObject, 0)
+func (m *TestRail) EventsToTestObjects(events map[string][]*TestEvent) []*TestMatcher {
+	tests := make([]*TestMatcher, 0)
 	for _, eventsBatch := range events {
-		t := &TestObject{}
+		t := &TestMatcher{}
 		for _, e := range eventsBatch {
 			if e.Action == "output" {
 				t.GoTestName = e.Test
@@ -52,15 +60,13 @@ func (m *TestRail) EventsToTestObjects(events map[string][]*TestEvent) []*TestOb
 				if len(res) != 0 && len(res[0]) == 2 {
 					t.Status = res[0][1]
 				}
-				res = testIssueRe.FindAllStringSubmatch(e.Output, -1)
+				res = testSkipIssueRe.FindAllStringSubmatch(e.Output, -1)
 				if len(res) != 0 && len(res[0]) == 2 {
 					t.IssueURL = res[0][1]
 				}
 			}
 		}
-		if t.CaseID != 0 && t.Status != "" {
-			tests = append(tests, t)
-		}
+		tests = append(tests, t)
 	}
 	return tests
 }
@@ -96,7 +102,10 @@ func (m *TestRail) JSONEventsToSendable(events []*TestEvent) testrail.SendableRe
 }
 
 // TestObjectsToSendableResultsForCase converts TestObjects to sendable results
-func (m *TestRail) TestObjectsToSendableResultsForCase(objs []*TestObject) testrail.SendableResultsForCase {
+func (m *TestRail) TestObjectsToSendableResultsForCase(objs []*TestMatcher) testrail.SendableResultsForCase {
+	if len(objs) == 0 {
+		log.Println("no valid tests found matching cases, skip sending")
+	}
 	results := make([]testrail.ResultsForCase, 0)
 	for _, o := range objs {
 		result := testrail.ResultsForCase{
@@ -141,29 +150,60 @@ func (m *TestRail) NAResults(cases []*CaseWithDesc) testrail.SendableResultsForC
 	return sendableResults
 }
 
-// FilterValidTests add only tests with matching case id and description
-func FilterValidTests(objs []*TestObject, cases []*CaseWithDesc) []*TestObject {
-	filteredObjs := make([]*TestObject, 0)
+func LogInvalidTests(objs *TestObjectSummary) {
+	if len(objs.NotFound) > 0 {
+		log.Println("Tests without testrail case ID:")
+		for _, o := range objs.NotFound {
+			log.Printf("  %s", o.GoTestName)
+		}
+	}
+	if len(objs.WrongDesc) > 0 {
+		log.Println("Test title discrepancy with testrail test-case title:")
+		for _, o := range objs.WrongDesc {
+			log.Printf("  %s", o.GoTestName)
+			log.Printf("    Test: %s", o.Desc)
+			log.Printf("    Testrail: %s", o.TRDesc)
+			log.Printf("    Testcase: %s", TRTicket(o.CaseID))
+		}
+	}
+	if len(objs.SkippedNoIssue) > 0 {
+		log.Println("Skipped tests without issue:")
+		for _, o := range objs.SkippedNoIssue {
+			log.Printf("  %s", o.GoTestName)
+		}
+	}
+}
+
+// FilterTestObjects split test objects into groups: valid/not found/wrong description
+func FilterTestObjects(objs []*TestMatcher, cases []*CaseWithDesc) *TestObjectSummary {
+	wrongDescObjs := make([]*TestMatcher, 0)
+	skipNoIssue := make([]*TestMatcher, 0)
+	notFoundObjs := make([]*TestMatcher, 0)
+	validObjs := make([]*TestMatcher, 0)
 	for _, o := range objs {
 		found := false
 		for _, c := range cases {
 			if o.CaseID == c.CaseID {
 				found = true
 				if o.Desc != c.Desc {
-					log.Printf(
-						"case description doesn't match, N/A status will be sent:\ntest: %s\nhas: %s\nwant: %s\n",
-						o.GoTestName,
-						o.Desc,
-						c.Desc,
-					)
+					o.TRDesc = c.Desc
+					wrongDescObjs = append(wrongDescObjs, o)
 					continue
 				}
-				filteredObjs = append(filteredObjs, o)
+				validObjs = append(validObjs, o)
 			}
 		}
 		if !found {
-			log.Printf("case not found: caseID: %d title: %s", o.CaseID, o.Desc)
+			notFoundObjs = append(notFoundObjs, o)
+		}
+		if o.Status == "SKIP" && o.IssueURL == "" {
+			skipNoIssue = append(skipNoIssue, o)
 		}
 	}
-	return filteredObjs
+	return &TestObjectSummary{
+		Valid:          validObjs,
+		NotFound:       notFoundObjs,
+		WrongDesc:      wrongDescObjs,
+		SkippedNoIssue: skipNoIssue,
+	}
 }

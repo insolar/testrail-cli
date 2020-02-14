@@ -8,8 +8,11 @@ package testrail_cli
 import (
 	"bufio"
 	"encoding/json"
+	"github.com/spf13/viper"
 	"io"
 	"log"
+	"path"
+	"strconv"
 	"strings"
 )
 
@@ -19,6 +22,10 @@ func TicketFromURL(url string) string {
 		return s[len(s)-1]
 	}
 	return url
+}
+
+func TRTicket(id int) string {
+	return path.Join(viper.GetString("URL"), "/index.php?/cases/view/", strconv.Itoa(id))
 }
 
 func ReadFile(stream io.Reader) []*TestEvent {

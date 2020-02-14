@@ -66,8 +66,9 @@ func main() {
 
 	testEventsBatch := t.GroupEventsByTest(events)
 	tObjects := t.EventsToTestObjects(testEventsBatch)
-	filteredObjects := tr.FilterValidTests(tObjects, casesWithDescs)
+	filteredObjects := tr.FilterTestObjects(tObjects, casesWithDescs)
+	tr.LogInvalidTests(filteredObjects)
 
-	sendableResults := t.TestObjectsToSendableResultsForCase(filteredObjects)
+	sendableResults := t.TestObjectsToSendableResultsForCase(filteredObjects.Valid)
 	t.UpdateRunForCases(runID, sendableResults)
 }
