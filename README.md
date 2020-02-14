@@ -52,3 +52,7 @@ Also you can pipe json in
 ```
 go test ./... -json | testrail-cli --URL=https://insolar.testrail.io/ --USER=autotest@insolar.io --PASSWORD=${pass} --RUN_ID=57
 ```
+Or save file using tee for debug
+```
+go test ./... -json | tee autotest.json | testrail-cli --URL=https://insolar.testrail.io/ --USER=autotest@insolar.io --PASSWORD=${pass} --RUN_ID=57
+```

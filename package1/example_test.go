@@ -13,19 +13,19 @@ import (
 func TestExample(t *testing.T) {
 	t.Parallel()
 	time.Sleep(100 * time.Millisecond)
-	t.Log("C3605 Pass test")
+	t.Log("C9999 Pass test")
 }
 
 func TestExample2(t *testing.T) {
 	t.Parallel()
 	time.Sleep(300 * time.Millisecond)
-	t.Log("C3606 Fail test")
+	t.Log("C3606 Fail testsdf")
 	t.Fail()
 }
 
 func TestExample3(t *testing.T) {
 	time.Sleep(500 * time.Millisecond)
 	t.Log("C3607 Skip test")
-	//t.Skip("sdfs")
-	t.Skip("sdfs https://insolar.atlassian.net/browse/OPS-1 some bad desc")
+	t.Skip("sdfs")
+	//t.Skip("sdfs https://insolar.atlassian.net/browse/OPS-1 some bad desc")
 }
