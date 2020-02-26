@@ -53,6 +53,10 @@ func (m *TestRail) EventsToTestObjects(events map[string][]*TestEvent) []*TestMa
 					if err != nil {
 						log.Fatal(err)
 					}
+					//TODO: Bad, should harden regex instead, debatable for now
+					if t.CaseID != 0 {
+						continue
+					}
 					t.CaseID = d
 					t.Desc = res[0][2]
 				}
@@ -86,7 +90,7 @@ func (m *TestRail) GroupEventsByTest(events []*TestEvent) map[string][]*TestEven
 	}
 	for uniqTest := range testNames {
 		for _, e := range events {
-			if UniqTestKey(e) == uniqTest && e.Test != "" {
+			if UniqTestKey(e) == uniqTest {
 				eventsByTest[uniqTest] = append(eventsByTest[uniqTest], e)
 			}
 		}
@@ -95,16 +99,17 @@ func (m *TestRail) GroupEventsByTest(events []*TestEvent) map[string][]*TestEven
 }
 
 // JSONEventsToSendable convert events to test rail sendable format
-func (m *TestRail) JSONEventsToSendable(events []*TestEvent) testrail.SendableResultsForCase {
+func (m *TestRail) JSONEventsToSendable(events []*TestEvent) *testrail.SendableResultsForCase {
 	testEventsBatch := m.GroupEventsByTest(events)
 	tObjects := m.EventsToTestObjects(testEventsBatch)
 	return m.TestObjectsToSendableResultsForCase(tObjects)
 }
 
 // TestObjectsToSendableResultsForCase converts TestObjects to sendable results
-func (m *TestRail) TestObjectsToSendableResultsForCase(objs []*TestMatcher) testrail.SendableResultsForCase {
+func (m *TestRail) TestObjectsToSendableResultsForCase(objs []*TestMatcher) *testrail.SendableResultsForCase {
 	if len(objs) == 0 {
 		log.Println("no valid tests found matching cases, skip sending")
+		return nil
 	}
 	results := make([]testrail.ResultsForCase, 0)
 	for _, o := range objs {
@@ -124,11 +129,11 @@ func (m *TestRail) TestObjectsToSendableResultsForCase(objs []*TestMatcher) test
 	sendableResults := testrail.SendableResultsForCase{
 		Results: results,
 	}
-	return sendableResults
+	return &sendableResults
 }
 
 // NAResults generate payload to set all test rail run results to UNTESTED
-func (m *TestRail) NAResults(cases []*CaseWithDesc) testrail.SendableResultsForCase {
+func (m *TestRail) NAResults(cases []*CaseWithDesc) *testrail.SendableResultsForCase {
 	results := make([]testrail.ResultsForCase, 0)
 	for _, c := range cases {
 		result := testrail.ResultsForCase{
@@ -144,7 +149,7 @@ func (m *TestRail) NAResults(cases []*CaseWithDesc) testrail.SendableResultsForC
 		}
 		results = append(results, result)
 	}
-	sendableResults := testrail.SendableResultsForCase{
+	sendableResults := &testrail.SendableResultsForCase{
 		Results: results,
 	}
 	return sendableResults

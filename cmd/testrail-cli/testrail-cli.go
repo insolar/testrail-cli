@@ -70,5 +70,7 @@ func main() {
 	tr.LogInvalidTests(filteredObjects)
 
 	sendableResults := t.TestObjectsToSendableResultsForCase(filteredObjects.Valid)
-	t.UpdateRunForCases(runID, sendableResults)
+	if sendableResults != nil {
+		t.UpdateRunForCases(runID, sendableResults)
+	}
 }

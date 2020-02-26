@@ -19,8 +19,7 @@ var (
 		"N/A":  7,
 		"SKIP": 6,
 	}
-	testStatusRe = regexp.MustCompile(`--- (.*):`)
-	//testSkipIssueRe = regexp.MustCompile(`.*issue:\s(.*?)\s`)
+	testStatusRe    = regexp.MustCompile(`--- (.*):`)
 	testSkipIssueRe = regexp.MustCompile(`insolar\.atlassian\.net/browse/([A-Z]+-\d+)`)
 	testCaseIdRe    = regexp.MustCompile(`C(\d{1,8})\s(.*)`)
 )
@@ -63,8 +62,8 @@ func (m *TestRail) GetRun(id int) testrail.Run {
 	return run
 }
 
-func (m *TestRail) UpdateRunForCases(runId int, results testrail.SendableResultsForCase) []testrail.Result {
-	res, err := m.c.AddResultsForCases(runId, results)
+func (m *TestRail) UpdateRunForCases(runId int, results *testrail.SendableResultsForCase) []testrail.Result {
+	res, err := m.c.AddResultsForCases(runId, *results)
 	if err != nil {
 		log.Fatal(err)
 	}
