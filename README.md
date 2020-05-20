@@ -32,13 +32,14 @@ func TestExample3(t *testing.T) {
 ```
 
 #### Run
-| Param key     |    Env key    |    Default                   | Description       |
-| ------------- | ------------- | ---------------------------- | ----------------- |
-| --URL         |   TR_URL      | https://insolar.testrail.io/ | testrail url      |
-| --USER        |   TR_USER     |   autotest@insolar.io        | testrail user     |
-| --PASSWORD    |   TR_PASSWORD |                              | testrail password |
-| --RUN_ID      |   TR_RUN_ID   |                              | testrail run id   |
-| --FILE        |   TR_FILE     |                              | go test json file |
+| Param key     |    Env key    |    Default                   | Description                 |
+| ------------- | ------------- | ---------------------------- | --------------------------- |
+| --URL         |   TR_URL      | https://insolar.testrail.io/ | testrail url                |
+| --USER        |   TR_USER     |   autotest@insolar.io        | testrail user               |
+| --PASSWORD    |   TR_PASSWORD |                              | testrail password           |
+| --RUN_ID      |   TR_RUN_ID   |                              | testrail run id             |
+| --FILE        |   TR_FILE     |                              | go test json file           |
+| --SKIP-DESC   |   SKIP-DESC   |                              | skip description check flag |
 
 Use params
 ```
