@@ -180,7 +180,7 @@ func LogInvalidTests(objs *TestObjectSummary) {
 }
 
 // FilterTestObjects split test objects into groups: valid/not found/wrong description
-func FilterTestObjects(objs []*TestMatcher, cases []*CaseWithDesc) *TestObjectSummary {
+func FilterTestObjects(objs []*TestMatcher, cases []*CaseWithDesc, skipDesc bool) *TestObjectSummary {
 	wrongDescObjs := make([]*TestMatcher, 0)
 	skipNoIssue := make([]*TestMatcher, 0)
 	notFoundObjs := make([]*TestMatcher, 0)
@@ -190,7 +190,7 @@ func FilterTestObjects(objs []*TestMatcher, cases []*CaseWithDesc) *TestObjectSu
 		for _, c := range cases {
 			if o.CaseID == c.CaseID {
 				found = true
-				if o.Desc != c.Desc {
+				if !skipDesc && o.Desc != c.Desc {
 					o.TRDesc = c.Desc
 					wrongDescObjs = append(wrongDescObjs, o)
 					continue
