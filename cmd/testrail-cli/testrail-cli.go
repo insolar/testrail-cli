@@ -24,7 +24,7 @@ func main() {
 	flag.String("PASSWORD", "", "testrail password/token")
 	flag.String("FILE", "", "go test json file")
 	flag.Int("RUN_ID", 0, "testrail run id")
-	flag.Bool("skip-desc", false, "skip description check")
+	flag.Bool("SKIP-DESC", false, "skip description check")
 	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
 	pflag.Parse()
 	viper.BindPFlags(pflag.CommandLine)
@@ -36,7 +36,7 @@ func main() {
 	pass := viper.GetString("PASSWORD")
 	runID := viper.GetInt("RUN_ID")
 	file := viper.GetString("FILE")
-	skipDesc := viper.GetBool("skip-desc")
+	skipDesc := viper.GetBool("SKIP-DESC")
 
 	if runID == 0 {
 		log.Fatal("provide run id, ex.: --RUN_ID=54, or env TR_RUN_ID=54")
