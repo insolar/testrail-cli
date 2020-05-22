@@ -19,8 +19,8 @@ func main() {
 
 	viper.AutomaticEnv()
 	viper.SetEnvPrefix("TR")
-	flag.String("URL", "https://insolar.testrail.io/", "testrail url")
-	flag.String("USER", "autotest@insolar.io", "testrail username")
+	flag.String("URL", "", "testrail url")
+	flag.String("USER", "", "testrail username")
 	flag.String("PASSWORD", "", "testrail password/token")
 	flag.String("FILE", "", "go test json file")
 	flag.Int("RUN_ID", 0, "testrail run id")
@@ -28,8 +28,6 @@ func main() {
 	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
 	pflag.Parse()
 	viper.BindPFlags(pflag.CommandLine)
-	viper.SetDefault("USER", "autotest@insolar.io")
-	viper.SetDefault("URL", "https://insolar.testrail.io/")
 
 	url := viper.GetString("URL")
 	user := viper.GetString("USER")
@@ -38,8 +36,14 @@ func main() {
 	file := viper.GetString("FILE")
 	skipDesc := viper.GetBool("SKIP-DESC")
 
+	if url == "" {
+		log.Fatal("provide TestRail url")
+	}
 	if runID == 0 {
 		log.Fatal("provide run id, ex.: --RUN_ID=54, or env TR_RUN_ID=54")
+	}
+	if user == "" {
+		log.Fatal("provide user for TestRail authentication")
 	}
 	if pass == "" {
 		log.Fatal("provide password/token for TestRail authentication")
