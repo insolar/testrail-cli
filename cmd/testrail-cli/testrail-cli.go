@@ -7,12 +7,17 @@ package main
 
 import (
 	"flag"
-	tr "github.com/insolar/testrail-cli"
-	"github.com/spf13/pflag"
-	"github.com/spf13/viper"
 	"io"
 	"log"
 	"os"
+
+	"github.com/spf13/pflag"
+	"github.com/spf13/viper"
+
+	tr "github.com/insolar/testrail-cli"
+	"github.com/insolar/testrail-cli/source"
+	"github.com/insolar/testrail-cli/source/json"
+	"github.com/insolar/testrail-cli/source/text"
 )
 
 func main() {
@@ -25,6 +30,7 @@ func main() {
 	flag.String("FILE", "", "go test json file")
 	flag.Int("RUN_ID", 0, "testrail run id")
 	flag.Bool("SKIP-DESC", false, "skip description check")
+	flag.String("FORMAT", "json", "test output format")
 	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
 	pflag.Parse()
 	viper.BindPFlags(pflag.CommandLine)
@@ -35,6 +41,7 @@ func main() {
 	runID := viper.GetInt("RUN_ID")
 	file := viper.GetString("FILE")
 	skipDesc := viper.GetBool("SKIP-DESC")
+	format := viper.GetString("format")
 
 	if url == "" {
 		log.Fatal("provide TestRail url")
@@ -48,6 +55,9 @@ func main() {
 	if pass == "" {
 		log.Fatal("provide password/token for TestRail authentication")
 	}
+	if format == "" {
+		log.Fatal("provide input format")
+	}
 
 	var stream io.Reader
 	if file != "" {
@@ -60,7 +70,18 @@ func main() {
 	} else {
 		stream = os.Stdin
 	}
-	events := tr.ReadFile(stream)
+
+	var parser source.Parser
+	switch format {
+	case "json":
+		parser = json.Parser{}
+	case "text":
+		parser = text.Parser{}
+	default:
+		log.Fatalf("Unsupported format %s", format)
+	}
+
+	events := parser.Parse(stream)
 
 	t := tr.NewTestRail(url, user, pass)
 	run := t.GetRun(runID)
