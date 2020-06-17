@@ -32,18 +32,20 @@ func TestExample3(t *testing.T) {
 ```
 
 #### Run
-| Param key     |    Env key    | Description                 |
-| ------------- | ------------- | --------------------------- |
-| --URL         |   TR_URL      | testrail url                |
-| --USER        |   TR_USER     | testrail user               |
-| --PASSWORD    |   TR_PASSWORD | testrail password           |
-| --RUN_ID      |   TR_RUN_ID   | testrail run id             |
-| --FILE        |   TR_FILE     | go test json file           |
-| --SKIP-DESC   |   SKIP-DESC   | skip description check flag |
+| Param key     |    Env key    | Description                    |
+| ------------- | ------------- | ------------------------------ |
+| --URL         |   TR_URL      | testrail url                   |
+| --FORMAT      |   TR_FORMAT   | input go test format text/json |
+| --USER        |   TR_USER     | testrail user                  |
+| --PASSWORD    |   TR_PASSWORD | testrail password              |
+| --RUN_ID      |   TR_RUN_ID   | testrail run id                |
+| --FILE        |   TR_FILE     | go test json file              |
+| --SKIP-DESC   |   SKIP-DESC   | skip description check flag    |
 
-Use params
+Use params for text/json formats
 ```
-testrail-cli --URL=https://example.testrail.com/ --USER=example@gmail.com --PASSWORD=${pass} --RUN_ID=57 --FILE=example_test.log
+testrail-cli --FORMAT text --URL=https://example.testrail.com/ --USER=example@gmail.com --PASSWORD=${pass} --RUN_ID=57 --FILE=example_test.log
+testrail-cli --FORMAT json --URL=https://example.testrail.com/ --USER=example@gmail.com --PASSWORD=${pass} --RUN_ID=57 --FILE=example_test.json
 ```
 Or env vars with TR prefix
 ```
