@@ -6,10 +6,12 @@
 package testrail_cli
 
 import (
-	"github.com/educlos/testrail"
 	"log"
 	"strconv"
 	"time"
+
+	"github.com/educlos/testrail"
+	"github.com/insolar/testrail-cli/source"
 )
 
 // TestMatcher represents data differences between implementation and testrail case
@@ -29,18 +31,8 @@ type TestObjectSummary struct {
 	SkippedNoIssue []*TestMatcher
 }
 
-// TestEvent go test2json event object
-type TestEvent struct {
-	Time    time.Time // encodes as an RFC3339-format string
-	Action  string
-	Package string
-	Test    string
-	Elapsed float64 // seconds
-	Output  string
-}
-
 // EventsToTestObjects parses event batches to construct TestObjects, extracting caseID, Description, Status and IssueURL
-func (m *TestRail) EventsToTestObjects(events map[string][]*TestEvent) []*TestMatcher {
+func (m *TestRail) EventsToTestObjects(events map[string][]source.TestEvent) []*TestMatcher {
 	tests := make([]*TestMatcher, 0)
 	for _, eventsBatch := range events {
 		t := &TestMatcher{}
@@ -75,13 +67,13 @@ func (m *TestRail) EventsToTestObjects(events map[string][]*TestEvent) []*TestMa
 	return tests
 }
 
-func UniqTestKey(e *TestEvent) string {
+func UniqTestKey(e source.TestEvent) string {
 	return e.Test + "|" + e.Package
 }
 
 // GroupEventsByTest groups test2json events by test + package key
-func (m *TestRail) GroupEventsByTest(events []*TestEvent) map[string][]*TestEvent {
-	eventsByTest := make(map[string][]*TestEvent)
+func (m *TestRail) GroupEventsByTest(events []source.TestEvent) map[string][]source.TestEvent {
+	eventsByTest := make(map[string][]source.TestEvent)
 	testNames := make(map[string]int)
 	for _, e := range events {
 		if _, ok := testNames[UniqTestKey(e)]; !ok {
@@ -99,7 +91,7 @@ func (m *TestRail) GroupEventsByTest(events []*TestEvent) map[string][]*TestEven
 }
 
 // JSONEventsToSendable convert events to test rail sendable format
-func (m *TestRail) JSONEventsToSendable(events []*TestEvent) *testrail.SendableResultsForCase {
+func (m *TestRail) JSONEventsToSendable(events []source.TestEvent) *testrail.SendableResultsForCase {
 	testEventsBatch := m.GroupEventsByTest(events)
 	tObjects := m.EventsToTestObjects(testEventsBatch)
 	return m.TestObjectsToSendableResultsForCase(tObjects)

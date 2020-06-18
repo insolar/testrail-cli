@@ -6,14 +6,11 @@
 package testrail_cli
 
 import (
-	"bufio"
-	"encoding/json"
-	"github.com/spf13/viper"
-	"io"
-	"log"
 	"path"
 	"strconv"
 	"strings"
+
+	"github.com/spf13/viper"
 )
 
 func TicketFromURL(url string) string {
@@ -26,20 +23,4 @@ func TicketFromURL(url string) string {
 
 func TRTicket(id int) string {
 	return path.Join(viper.GetString("URL"), "/index.php?/cases/view/", strconv.Itoa(id))
-}
-
-func ReadFile(stream io.Reader) []*TestEvent {
-	testEvents := make([]*TestEvent, 0)
-	scanner := bufio.NewScanner(stream)
-	for scanner.Scan() {
-		var te *TestEvent
-		if err := json.Unmarshal([]byte(scanner.Text()), &te); err != nil {
-			log.Fatalf("failed to unmarshal test event json: %s\n", err)
-		}
-		testEvents = append(testEvents, te)
-	}
-	if err := scanner.Err(); err != nil {
-		log.Fatal(err)
-	}
-	return testEvents
 }

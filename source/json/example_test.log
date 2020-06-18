@@ -1,0 +1,79 @@
+{"Time":"2020-06-17T10:50:26.086734+03:00","Action":"output","Package":"github.com/insolar/testrail-cli","Output":"?   \tgithub.com/insolar/testrail-cli\t[no test files]\n"}
+{"Time":"2020-06-17T10:50:26.086978+03:00","Action":"skip","Package":"github.com/insolar/testrail-cli","Elapsed":0}
+{"Time":"2020-06-17T10:50:26.123245+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/cmd/testrail-cli","Output":"?   \tgithub.com/insolar/testrail-cli/cmd/testrail-cli\t[no test files]\n"}
+{"Time":"2020-06-17T10:50:26.123278+03:00","Action":"skip","Package":"github.com/insolar/testrail-cli/cmd/testrail-cli","Elapsed":0}
+{"Time":"2020-06-17T10:50:26.537302+03:00","Action":"run","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample"}
+{"Time":"2020-06-17T10:50:26.537336+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample","Output":"=== RUN   TestExample\n"}
+{"Time":"2020-06-17T10:50:26.537351+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample","Output":"=== PAUSE TestExample\n"}
+{"Time":"2020-06-17T10:50:26.537355+03:00","Action":"pause","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample"}
+{"Time":"2020-06-17T10:50:26.53736+03:00","Action":"run","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample2"}
+{"Time":"2020-06-17T10:50:26.537363+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample2","Output":"=== RUN   TestExample2\n"}
+{"Time":"2020-06-17T10:50:26.537367+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample2","Output":"=== PAUSE TestExample2\n"}
+{"Time":"2020-06-17T10:50:26.537451+03:00","Action":"pause","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample2"}
+{"Time":"2020-06-17T10:50:26.537473+03:00","Action":"run","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample3"}
+{"Time":"2020-06-17T10:50:26.537477+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample3","Output":"=== RUN   TestExample3\n"}
+{"Time":"2020-06-17T10:50:26.638122+03:00","Action":"run","Package":"github.com/insolar/testrail-cli/source/json","Test":"TestParser_Parse"}
+{"Time":"2020-06-17T10:50:26.638159+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/source/json","Test":"TestParser_Parse","Output":"=== RUN   TestParser_Parse\n"}
+{"Time":"2020-06-17T10:50:26.638173+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/source/json","Test":"TestParser_Parse","Output":"--- PASS: TestParser_Parse (0.00s)\n"}
+{"Time":"2020-06-17T10:50:26.638177+03:00","Action":"pass","Package":"github.com/insolar/testrail-cli/source/json","Test":"TestParser_Parse","Elapsed":0}
+{"Time":"2020-06-17T10:50:26.638184+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/source/json","Output":"PASS\n"}
+{"Time":"2020-06-17T10:50:26.638187+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/source/json","Output":"ok  \tgithub.com/insolar/testrail-cli/source/json\t(cached)\n"}
+{"Time":"2020-06-17T10:50:26.638191+03:00","Action":"pass","Package":"github.com/insolar/testrail-cli/source/json","Elapsed":0.002}
+{"Time":"2020-06-17T10:50:26.832762+03:00","Action":"run","Package":"github.com/insolar/testrail-cli/source/text","Test":"TestParser_Parse"}
+{"Time":"2020-06-17T10:50:26.832791+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/source/text","Test":"TestParser_Parse","Output":"=== RUN   TestParser_Parse\n"}
+{"Time":"2020-06-17T10:50:26.83281+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/source/text","Test":"TestParser_Parse","Output":"--- PASS: TestParser_Parse (0.00s)\n"}
+{"Time":"2020-06-17T10:50:26.832815+03:00","Action":"pass","Package":"github.com/insolar/testrail-cli/source/text","Test":"TestParser_Parse","Elapsed":0}
+{"Time":"2020-06-17T10:50:26.832822+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/source/text","Output":"PASS\n"}
+{"Time":"2020-06-17T10:50:26.833278+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/source/text","Output":"ok  \tgithub.com/insolar/testrail-cli/source/text\t0.200s\n"}
+{"Time":"2020-06-17T10:50:26.836212+03:00","Action":"pass","Package":"github.com/insolar/testrail-cli/source/text","Elapsed":0.203}
+{"Time":"2020-06-17T10:50:27.041301+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample3","Output":"    TestExample3: example_test.go:28: C3607 Skip test\n"}
+{"Time":"2020-06-17T10:50:27.041426+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample3","Output":"    TestExample3: example_test.go:29: sdfs\n"}
+{"Time":"2020-06-17T10:50:27.041483+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample3","Output":"--- SKIP: TestExample3 (0.50s)\n"}
+{"Time":"2020-06-17T10:50:27.0415+03:00","Action":"skip","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample3","Elapsed":0.5}
+{"Time":"2020-06-17T10:50:27.041524+03:00","Action":"run","Package":"github.com/insolar/testrail-cli/package1","Test":"TestMGRGroupCreateWith2Members"}
+{"Time":"2020-06-17T10:50:27.041533+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestMGRGroupCreateWith2Members","Output":"=== RUN   TestMGRGroupCreateWith2Members\n"}
+{"Time":"2020-06-17T10:50:27.041646+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestMGRGroupCreateWith2Members","Output":"=== PAUSE TestMGRGroupCreateWith2Members\n"}
+{"Time":"2020-06-17T10:50:27.041676+03:00","Action":"pause","Package":"github.com/insolar/testrail-cli/package1","Test":"TestMGRGroupCreateWith2Members"}
+{"Time":"2020-06-17T10:50:27.041722+03:00","Action":"run","Package":"github.com/insolar/testrail-cli/package1","Test":"TestMGRGroupCreateCheckEmptySequence"}
+{"Time":"2020-06-17T10:50:27.041736+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestMGRGroupCreateCheckEmptySequence","Output":"=== RUN   TestMGRGroupCreateCheckEmptySequence\n"}
+{"Time":"2020-06-17T10:50:27.041752+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestMGRGroupCreateCheckEmptySequence","Output":"=== PAUSE TestMGRGroupCreateCheckEmptySequence\n"}
+{"Time":"2020-06-17T10:50:27.041848+03:00","Action":"pause","Package":"github.com/insolar/testrail-cli/package1","Test":"TestMGRGroupCreateCheckEmptySequence"}
+{"Time":"2020-06-17T10:50:27.041882+03:00","Action":"cont","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample"}
+{"Time":"2020-06-17T10:50:27.041901+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample","Output":"=== CONT  TestExample\n"}
+{"Time":"2020-06-17T10:50:27.041949+03:00","Action":"cont","Package":"github.com/insolar/testrail-cli/package1","Test":"TestMGRGroupCreateCheckEmptySequence"}
+{"Time":"2020-06-17T10:50:27.041957+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestMGRGroupCreateCheckEmptySequence","Output":"=== CONT  TestMGRGroupCreateCheckEmptySequence\n"}
+{"Time":"2020-06-17T10:50:27.041965+03:00","Action":"cont","Package":"github.com/insolar/testrail-cli/package1","Test":"TestMGRGroupCreateWith2Members"}
+{"Time":"2020-06-17T10:50:27.04197+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestMGRGroupCreateWith2Members","Output":"=== CONT  TestMGRGroupCreateWith2Members\n"}
+{"Time":"2020-06-17T10:50:27.041978+03:00","Action":"cont","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample2"}
+{"Time":"2020-06-17T10:50:27.041983+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample2","Output":"=== CONT  TestExample2\n"}
+{"Time":"2020-06-17T10:50:27.041991+03:00","Action":"run","Package":"github.com/insolar/testrail-cli/package1","Test":"TestMGRGroupCreateCheckEmptySequence/groupGoal=200"}
+{"Time":"2020-06-17T10:50:27.041997+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestMGRGroupCreateCheckEmptySequence/groupGoal=200","Output":"=== RUN   TestMGRGroupCreateCheckEmptySequence/groupGoal=200\n"}
+{"Time":"2020-06-17T10:50:27.042067+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestMGRGroupCreateCheckEmptySequence/groupGoal=200","Output":"    TestMGRGroupCreateCheckEmptySequence/groupGoal=200: example_test.go:47: C3702 Create group of 3 members with groupGoal=200 and check empty sequence\n"}
+{"Time":"2020-06-17T10:50:27.042139+03:00","Action":"run","Package":"github.com/insolar/testrail-cli/package1","Test":"TestMGRGroupCreateCheckEmptySequence/groupGoal=300"}
+{"Time":"2020-06-17T10:50:27.042169+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestMGRGroupCreateCheckEmptySequence/groupGoal=300","Output":"=== RUN   TestMGRGroupCreateCheckEmptySequence/groupGoal=300\n"}
+{"Time":"2020-06-17T10:50:27.042185+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestMGRGroupCreateCheckEmptySequence/groupGoal=300","Output":"    TestMGRGroupCreateCheckEmptySequence/groupGoal=300: example_test.go:47: C3704 Create group of 3 members with groupGoal=300 and check empty sequence\n"}
+{"Time":"2020-06-17T10:50:27.0422+03:00","Action":"run","Package":"github.com/insolar/testrail-cli/package1","Test":"TestMGRGroupCreateCheckEmptySequence/groupGoal=400"}
+{"Time":"2020-06-17T10:50:27.042207+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestMGRGroupCreateCheckEmptySequence/groupGoal=400","Output":"=== RUN   TestMGRGroupCreateCheckEmptySequence/groupGoal=400\n"}
+{"Time":"2020-06-17T10:50:27.042257+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestMGRGroupCreateCheckEmptySequence/groupGoal=400","Output":"    TestMGRGroupCreateCheckEmptySequence/groupGoal=400: example_test.go:47: C3696 Create group of 3 members with groupGoal=400 and check empty sequence\n"}
+{"Time":"2020-06-17T10:50:27.042281+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestMGRGroupCreateCheckEmptySequence","Output":"--- PASS: TestMGRGroupCreateCheckEmptySequence (0.00s)\n"}
+{"Time":"2020-06-17T10:50:27.042295+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestMGRGroupCreateCheckEmptySequence/groupGoal=200","Output":"    --- PASS: TestMGRGroupCreateCheckEmptySequence/groupGoal=200 (0.00s)\n"}
+{"Time":"2020-06-17T10:50:27.042302+03:00","Action":"pass","Package":"github.com/insolar/testrail-cli/package1","Test":"TestMGRGroupCreateCheckEmptySequence/groupGoal=200","Elapsed":0}
+{"Time":"2020-06-17T10:50:27.042332+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestMGRGroupCreateCheckEmptySequence/groupGoal=300","Output":"    --- PASS: TestMGRGroupCreateCheckEmptySequence/groupGoal=300 (0.00s)\n"}
+{"Time":"2020-06-17T10:50:27.042361+03:00","Action":"pass","Package":"github.com/insolar/testrail-cli/package1","Test":"TestMGRGroupCreateCheckEmptySequence/groupGoal=300","Elapsed":0}
+{"Time":"2020-06-17T10:50:27.04237+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestMGRGroupCreateCheckEmptySequence/groupGoal=400","Output":"    --- PASS: TestMGRGroupCreateCheckEmptySequence/groupGoal=400 (0.00s)\n"}
+{"Time":"2020-06-17T10:50:27.144602+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestMGRGroupCreateCheckEmptySequence/groupGoal=400","Output":"    TestExample: example_test.go:16: C9999 Pass test\n"}
+{"Time":"2020-06-17T10:50:27.14466+03:00","Action":"pass","Package":"github.com/insolar/testrail-cli/package1","Test":"TestMGRGroupCreateCheckEmptySequence/groupGoal=400","Elapsed":0}
+{"Time":"2020-06-17T10:50:27.144667+03:00","Action":"pass","Package":"github.com/insolar/testrail-cli/package1","Test":"TestMGRGroupCreateCheckEmptySequence","Elapsed":0}
+{"Time":"2020-06-17T10:50:27.144672+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample","Output":"--- PASS: TestExample (0.10s)\n"}
+{"Time":"2020-06-17T10:50:27.34649+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample","Output":"    TestExample2: example_test.go:22: C3606 Fail testsdf\n"}
+{"Time":"2020-06-17T10:50:27.346549+03:00","Action":"pass","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample","Elapsed":0.1}
+{"Time":"2020-06-17T10:50:27.346565+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample2","Output":"--- FAIL: TestExample2 (0.30s)\n"}
+{"Time":"2020-06-17T10:50:28.045327+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample2","Output":"    TestMGRGroupCreateWith2Members: example_test.go:35: C3703 Error creating group of 2 members\n"}
+{"Time":"2020-06-17T10:50:28.045388+03:00","Action":"fail","Package":"github.com/insolar/testrail-cli/package1","Test":"TestExample2","Elapsed":0.3}
+{"Time":"2020-06-17T10:50:28.045426+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Test":"TestMGRGroupCreateWith2Members","Output":"--- PASS: TestMGRGroupCreateWith2Members (1.00s)\n"}
+{"Time":"2020-06-17T10:50:28.045439+03:00","Action":"pass","Package":"github.com/insolar/testrail-cli/package1","Test":"TestMGRGroupCreateWith2Members","Elapsed":1}
+{"Time":"2020-06-17T10:50:28.045449+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Output":"FAIL\n"}
+{"Time":"2020-06-17T10:50:28.046394+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/package1","Output":"FAIL\tgithub.com/insolar/testrail-cli/package1\t1.581s\n"}
+{"Time":"2020-06-17T10:50:28.04644+03:00","Action":"fail","Package":"github.com/insolar/testrail-cli/package1","Elapsed":1.581}
+{"Time":"2020-06-17T10:50:28.04764+03:00","Action":"output","Package":"github.com/insolar/testrail-cli/source","Output":"?   \tgithub.com/insolar/testrail-cli/source\t[no test files]\n"}
+{"Time":"2020-06-17T10:50:28.047659+03:00","Action":"skip","Package":"github.com/insolar/testrail-cli/source","Elapsed":0}
