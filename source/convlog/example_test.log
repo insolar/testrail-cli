@@ -1,0 +1,38 @@
+?   	github.com/insolar/testrail-cli	[no test files]
+?   	github.com/insolar/testrail-cli/cmd/testrail-cli	[no test files]
+=== RUN   TestExample
+2020-07-20T19:19:01.801055000+03:00 ??? C9999 Pass test
+--- PASS: TestExample (0.10s)
+=== RUN   TestExample2
+2020-07-20T19:19:01.801055000+03:00 ??? C3606 Fail testsdf
+--- FAIL: TestExample2 (0.30s)
+=== RUN   TestExample3
+2020-07-20T19:19:01.801055000+03:00 ??? C3607 Skip test
+2020-07-20T19:19:01.801075000+03:00 DBG sdfs
+--- SKIP: TestExample3 (0.50s)
+=== RUN   TestMGRGroupCreateWith2Members
+2020-07-20T19:19:01.801055000+03:00 ??? C3703 Error creating group of 2 members
+--- PASS: TestMGRGroupCreateWith2Members (1.00s)
+=== RUN   TestMGRGroupCreateCheckEmptySequence
+=== RUN   TestMGRGroupCreateCheckEmptySequence/groupGoal=200
+2020-07-20T19:19:01.801055000+03:00 ??? C3702 Create group of 3 members with groupGoal=200 and check empty sequence
+=== RUN   TestMGRGroupCreateCheckEmptySequence/groupGoal=300
+2020-07-20T19:19:01.801055000+03:00 ??? C3704 Create group of 3 members with groupGoal=300 and check empty sequence
+=== RUN   TestMGRGroupCreateCheckEmptySequence/groupGoal=400
+2020-07-20T19:19:01.801055000+03:00 ??? C3696 Create group of 3 members with groupGoal=400 and check empty sequence
+--- PASS: TestMGRGroupCreateCheckEmptySequence (0.00s)
+--- PASS: TestMGRGroupCreateCheckEmptySequence/groupGoal=200 (0.00s)
+--- PASS: TestMGRGroupCreateCheckEmptySequence/groupGoal=300 (0.00s)
+--- PASS: TestMGRGroupCreateCheckEmptySequence/groupGoal=400 (0.00s)
+FAIL
+FAIL	github.com/insolar/testrail-cli/package1	1.581s
+?   	github.com/insolar/testrail-cli/source	[no test files]
+=== RUN   TestParser_Parse
+--- PASS: TestParser_Parse (0.00s)
+PASS
+ok  	github.com/insolar/testrail-cli/source/json	(cached)
+=== RUN   TestParser_Parse
+--- PASS: TestParser_Parse (0.00s)
+PASS
+ok  	github.com/insolar/testrail-cli/source/text	0.200s
+FAIL
