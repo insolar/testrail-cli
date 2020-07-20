@@ -55,7 +55,7 @@ var (
 	skipLinePrefix = []byte("?   \t")
 	skipLineSuffix = []byte("\t[no test files]\n")
 
-	convLogPrefixRe = regexp.MustCompile(`(?m)^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+[+\-]\d{2}:\d{2}\s.{3}\s`)
+	convLogPrefixRe = regexp.MustCompile(`(?m)^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+([+\-]\d{2}:\d{2}|Z)\s.{3}\s`)
 )
 
 func (Parser) Parse(input io.Reader) []source.TestEvent {
