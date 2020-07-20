@@ -15,7 +15,7 @@
 --- PASS: TestMGRGroupCreateWith2Members (1.00s)
 === RUN   TestMGRGroupCreateCheckEmptySequence
 === RUN   TestMGRGroupCreateCheckEmptySequence/groupGoal=200
-2020-07-20T19:19:01.801055000+03:00 ??? C3702 Create group of 3 members with groupGoal=200 and check empty sequence
+2020-07-20T19:19:01.801055000-02:00 ??? C3702 Create group of 3 members with groupGoal=200 and check empty sequence
 === RUN   TestMGRGroupCreateCheckEmptySequence/groupGoal=300
 2020-07-20T19:19:01.801055000+03:00 ??? C3704 Create group of 3 members with groupGoal=300 and check empty sequence
 === RUN   TestMGRGroupCreateCheckEmptySequence/groupGoal=400
