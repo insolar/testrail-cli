@@ -16,6 +16,7 @@ import (
 
 	tr "github.com/insolar/testrail-cli"
 	"github.com/insolar/testrail-cli/source"
+	"github.com/insolar/testrail-cli/source/convlog"
 	"github.com/insolar/testrail-cli/source/json"
 	"github.com/insolar/testrail-cli/source/text"
 )
@@ -77,6 +78,8 @@ func main() {
 		parser = json.Parser{}
 	case "text":
 		parser = text.Parser{}
+	case "convlog":
+		parser = convlog.Parser{}
 	default:
 		log.Fatalf("Unsupported format %s", format)
 	}
