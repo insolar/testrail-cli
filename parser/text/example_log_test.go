@@ -5,9 +5,9 @@
 
 package text
 
-import "github.com/insolar/testrail-cli/source"
+import "github.com/insolar/testrail-cli/parser"
 
-var expectedLog = []source.TestEvent{
+var expectedLog = []parser.TestEvent{
 	{Action: "output", Package: "github.com/insolar/testrail-cli", Test: "", Elapsed: 0.000000, Output: "?   \tgithub.com/insolar/testrail-cli\t[no test files]\n"},
 	{Action: "skip", Package: "github.com/insolar/testrail-cli", Test: "", Elapsed: 0.000000, Output: ""},
 	{Action: "output", Package: "github.com/insolar/testrail-cli/cmd/testrail-cli", Test: "", Elapsed: 0.000000, Output: "?   \tgithub.com/insolar/testrail-cli/cmd/testrail-cli\t[no test files]\n"},
