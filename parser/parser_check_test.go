@@ -3,7 +3,7 @@
 //  This material is licensed under the Insolar License version 1.0,
 //  available at https://github.com/insolar/testrail-cli/LICENSE.md.
 
-package source_test
+package parser_test
 
 import (
 	"os"
@@ -12,9 +12,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/insolar/testrail-cli/source"
-	"github.com/insolar/testrail-cli/source/json"
-	"github.com/insolar/testrail-cli/source/text"
+	"github.com/insolar/testrail-cli/parser"
+	"github.com/insolar/testrail-cli/parser/json"
+	"github.com/insolar/testrail-cli/parser/text"
 )
 
 func TestParsers(t *testing.T) {
@@ -28,7 +28,7 @@ func TestParsers(t *testing.T) {
 
 	textRes := text.Parser{}.Parse(textFile)
 
-	var JSONDiff []source.TestEvent
+	var JSONDiff []parser.TestEvent
 	for _, e := range jsonRes {
 		found := false
 		for _, te := range textRes {
@@ -50,7 +50,7 @@ func TestParsers(t *testing.T) {
 		}
 	}
 
-	source.DumpEvents(JSONDiff)
+	parser.DumpEvents(JSONDiff)
 
 	assert.Nil(t, JSONDiff)
 }

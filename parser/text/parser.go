@@ -13,10 +13,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/insolar/testrail-cli/source"
+	"github.com/insolar/testrail-cli/parser"
 )
 
-var _ source.Parser = (*Parser)(nil)
+var _ parser.Parser = (*Parser)(nil)
 
 type Parser struct{}
 
@@ -55,64 +55,39 @@ var (
 	skipLineSuffix = []byte("\t[no test files]\n")
 )
 
-func (Parser) Parse(input io.Reader) []source.TestEvent {
-	scanner := NewLineScanner(input)
+func (p Parser) Parse(input io.Reader) []parser.TestEvent {
+	var testEvents []parser.TestEvent
 
-	converter := pkgConverter{}
-
-	var res []source.TestEvent
-	chunk := make([]source.TestEvent, 0)
-
-	for scanner.Scan() {
-		chunk = append(chunk, converter.handleInputLine(scanner.Text())...)
-
-		if converter.finished {
-			for i := range chunk {
-				if chunk[i].Package == "" {
-					chunk[i].Package = converter.pkg
-				}
-			}
-			chunk = append(chunk, converter.flushReport(0)...)
-			if len(chunk) == 0 {
-				continue
-			}
-			chunk = append(chunk, source.TestEvent{
-				Action:  converter.result,
-				Package: converter.pkg,
-				Elapsed: converter.elapsed,
-			})
-			res = append(res, chunk...)
-			chunk = make([]source.TestEvent, 0)
-			converter = pkgConverter{}
+	iter := p.GetParseIterator(input)
+	for {
+		_, te, err := iter.Next()
+		if parser.IsEOF(err) {
+			break
+		} else if err != nil {
+			log.Fatal(err)
 		}
-	}
-	if err := scanner.Err(); err != nil {
-		log.Fatal(err)
+
+		testEvents = append(testEvents, te)
 	}
 
-	if converter.result != "" {
-		res = append(res, converter.flushReport(0)...)
-		res = append(res, source.TestEvent{
-			Action:  converter.result,
-			Package: converter.pkg,
-			Elapsed: converter.elapsed,
-		})
-	}
+	return testEvents
+}
 
-	return res
+func (Parser) GetParseIterator(inp io.Reader) parser.EventReader {
+	return &iterativeReader{scanner: NewLineScanner(inp)}
 }
 
 type pkgConverter struct {
 	pkg      string             // package to name in events
 	elapsed  float64            // duration in seconds
 	testName string             // name of current test, for output attribution
-	report   []source.TestEvent // pending test result reports (nested for subtests)
+	report   []parser.TestEvent // pending test result reports (nested for subtests)
 	result   string             // overall test result if seen
 	finished bool
 }
 
-func (c *pkgConverter) flushReport(depth int) []source.TestEvent {
-	res := make([]source.TestEvent, 0, len(c.report)-depth)
+func (c *pkgConverter) flushReport(depth int) []parser.TestEvent {
+	res := make([]parser.TestEvent, 0, len(c.report)-depth)
 	for len(c.report) > depth {
 		e := c.report[len(c.report)-1]
 		c.report = c.report[:len(c.report)-1]
@@ -126,10 +101,10 @@ func (c *pkgConverter) flushReport(depth int) []source.TestEvent {
 	return res
 }
 
-func (c *pkgConverter) handleInputLine(line []byte) []source.TestEvent {
+func (c *pkgConverter) handleInputLine(line []byte) []parser.TestEvent {
 	// Final PASS or FAIL.
 	if bytes.Equal(line, bigPass) {
-		return []source.TestEvent{
+		return []parser.TestEvent{
 			{
 				Action: "output",
 				Output: string(line),
@@ -138,9 +113,9 @@ func (c *pkgConverter) handleInputLine(line []byte) []source.TestEvent {
 	}
 	if bytes.Equal(line, bigFail) {
 		if c.pkg == "" {
-			return []source.TestEvent{}
+			return []parser.TestEvent{}
 		}
-		return []source.TestEvent{
+		return []parser.TestEvent{
 			{
 				Action: "output",
 				Output: string(line),
@@ -169,7 +144,7 @@ func (c *pkgConverter) handleInputLine(line []byte) []source.TestEvent {
 		}
 
 		res := c.flushReport(0)
-		res = append(res, source.TestEvent{
+		res = append(res, parser.TestEvent{
 			Action: "output",
 			Output: string(line),
 		})
@@ -177,7 +152,7 @@ func (c *pkgConverter) handleInputLine(line []byte) []source.TestEvent {
 		return res
 	}
 
-	res := make([]source.TestEvent, 0)
+	res := make([]parser.TestEvent, 0)
 
 	// Special case for entirely skipped test binary: "?   \tpkgname\t[no test files]\n" is only line.
 	// Report it as plain output but remember to say skip in the final summary.
@@ -238,11 +213,11 @@ func (c *pkgConverter) handleInputLine(line []byte) []source.TestEvent {
 
 		name := c.testName
 
-		if testName, ok := source.TryExtractTest(origLine); ok {
+		if testName, ok := parser.TryExtractTest(origLine); ok {
 			name = testName
 		}
 
-		res = append(res, source.TestEvent{
+		res = append(res, parser.TestEvent{
 			Action: "output",
 			Output: string(origLine),
 			Test:   name,
@@ -261,7 +236,7 @@ func (c *pkgConverter) handleInputLine(line []byte) []source.TestEvent {
 	action := strings.ToLower(strings.TrimSuffix(strings.TrimSpace(string(line[commonPrefixLen:i])), ":"))
 	name := strings.TrimSpace(string(line[i:]))
 
-	e := source.TestEvent{Action: action}
+	e := parser.TestEvent{Action: action}
 	if line[0] == '-' { // PASS or FAIL report
 		// Parse out elapsed time.
 		if i := strings.Index(name, " ("); i >= 0 {
@@ -277,7 +252,7 @@ func (c *pkgConverter) handleInputLine(line []byte) []source.TestEvent {
 		if len(c.report) < indent {
 			// Nested deeper than expected.
 			// Treat this line as plain output.
-			return append(res, source.TestEvent{
+			return append(res, parser.TestEvent{
 				Action: "output",
 				Output: string(origLine),
 				Test:   name,
@@ -288,7 +263,7 @@ func (c *pkgConverter) handleInputLine(line []byte) []source.TestEvent {
 		e.Test = name
 		c.testName = name
 		c.report = append(c.report, e)
-		res = append(res, source.TestEvent{
+		res = append(res, parser.TestEvent{
 			Action: "output",
 			Output: string(origLine),
 			Test:   c.testName,
@@ -305,7 +280,7 @@ func (c *pkgConverter) handleInputLine(line []byte) []source.TestEvent {
 		// For a pause, we want to write the pause notification before
 		// delivering the pause event, just so it doesn't look like the test
 		// is generating output immediately after being paused.
-		res = append(res, source.TestEvent{
+		res = append(res, parser.TestEvent{
 			Action: "output",
 			Output: string(line),
 			Test:   c.testName,
@@ -313,7 +288,7 @@ func (c *pkgConverter) handleInputLine(line []byte) []source.TestEvent {
 	}
 	res = append(res, e)
 	if action != "pause" {
-		res = append(res, source.TestEvent{
+		res = append(res, parser.TestEvent{
 			Action: "output",
 			Output: string(line),
 			Test:   c.testName,

@@ -14,15 +14,14 @@ import (
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 
-	tr "github.com/insolar/testrail-cli"
-	"github.com/insolar/testrail-cli/source"
-	"github.com/insolar/testrail-cli/source/convlog"
-	"github.com/insolar/testrail-cli/source/json"
-	"github.com/insolar/testrail-cli/source/text"
+	"github.com/insolar/testrail-cli/cmd/testrail-cli/internal"
+	"github.com/insolar/testrail-cli/parser"
+	"github.com/insolar/testrail-cli/parser/json"
+	"github.com/insolar/testrail-cli/parser/text"
+	"github.com/insolar/testrail-cli/testrail"
 )
 
 func main() {
-
 	viper.AutomaticEnv()
 	viper.SetEnvPrefix("TR")
 	flag.String("URL", "", "testrail url")
@@ -32,17 +31,19 @@ func main() {
 	flag.Int("RUN_ID", 0, "testrail run id")
 	flag.Bool("SKIP-DESC", false, "skip description check")
 	flag.String("FORMAT", "json", "test output format")
+	flag.String("MATCHER", "default", "test output matcher")
 	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
 	pflag.Parse()
 	viper.BindPFlags(pflag.CommandLine)
 
-	url := viper.GetString("URL")
-	user := viper.GetString("USER")
-	pass := viper.GetString("PASSWORD")
-	runID := viper.GetInt("RUN_ID")
-	file := viper.GetString("FILE")
-	skipDesc := viper.GetBool("SKIP-DESC")
-	format := viper.GetString("format")
+	var (
+		url      = viper.GetString("URL")
+		user     = viper.GetString("USER")
+		pass     = viper.GetString("PASSWORD")
+		runID    = viper.GetInt("RUN_ID")
+		file     = viper.GetString("FILE")
+		skipDesc = viper.GetBool("SKIP-DESC")
+	)
 
 	if url == "" {
 		log.Fatal("provide TestRail url")
@@ -56,51 +57,41 @@ func main() {
 	if pass == "" {
 		log.Fatal("provide password/token for TestRail authentication")
 	}
-	if format == "" {
-		log.Fatal("provide input format")
+
+	var (
+		parserName = viper.GetString("format")
+		parserInstance parser.Parser
+	)
+	switch parserName {
+	case "json":
+		parserInstance = json.Parser{}
+	case "text":
+		parserInstance = text.Parser{}
+	default:
+		log.Fatalf("Unsupported format %s", parserName)
 	}
 
-	var stream io.Reader
+	matcherInstance := internal.Converter{}
+
+	var stream io.Reader = os.Stdin
 	if file != "" {
 		f, err := os.Open(file)
 		if err != nil {
 			log.Fatal(err)
 		}
-		//defer f.Close()
+		defer f.Close()
+
 		stream = f
-	} else {
-		stream = os.Stdin
 	}
+	eventReader := parserInstance.GetParseIterator(stream)
+	tObjects := matcherInstance.ConvertEventsToMatcherObjects(eventReader)
 
-	var parser source.Parser
-	switch format {
-	case "json":
-		parser = json.Parser{}
-	case "text":
-		parser = text.Parser{}
-	case "convlog":
-		parser = convlog.Parser{}
-	default:
-		log.Fatalf("Unsupported format %s", format)
-	}
+	t := testrail.NewUploader(url, user, pass)
+	t.Init(runID)
 
-	events := parser.Parse(stream)
+	filteredObjects := internal.FilterTestObjects(tObjects, t.GetCasesWithDescription(), skipDesc)
+	filteredObjects.LogInvalidTests(t)
 
-	t := tr.NewTestRail(url, user, pass)
-	run := t.GetRun(runID)
-	casesWithDescs := t.GetCasesWithDescs(run.ProjectID, run.SuiteID)
-	// update all cases with N/A status, we store all autotests in ONE run, so in case
-	// someone delete particular case implementation status must be updated to N/A
-	untested := t.NAResults(casesWithDescs)
-	t.UpdateRunForCases(runID, untested)
-
-	testEventsBatch := t.GroupEventsByTest(events)
-	tObjects := t.EventsToTestObjects(testEventsBatch)
-	filteredObjects := tr.FilterTestObjects(tObjects, casesWithDescs, skipDesc)
-	tr.LogInvalidTests(filteredObjects)
-
-	sendableResults := t.TestObjectsToSendableResultsForCase(filteredObjects.Valid)
-	if sendableResults != nil {
-		t.UpdateRunForCases(runID, sendableResults)
-	}
+	t.AddTests(filteredObjects.Valid)
+	t.Upload()
 }
