@@ -53,53 +53,6 @@ func NewUploader(url string, user string, password string) *Uploader {
 	}
 }
 
-// NAResults generate payload to set all test rail run results to UNTESTED
-func (m *Uploader) naResults(cases types.TestCasesWithDescription) *testrail.SendableResultsForCase {
-	results := make([]testrail.ResultsForCase, 0)
-	for _, c := range cases {
-		result := testrail.ResultsForCase{
-			CaseID: c.ID,
-			SendableResult: testrail.SendableResult{
-				AssignedToID: autotestUserID,
-				StatusID:     statusMap[types.TestStatusNotAvailable],
-				Comment:      "",
-				Version:      "1",
-				Elapsed:      *testrail.TimespanFromDuration(1 * time.Second),
-				Defects:      "",
-			},
-		}
-		results = append(results, result)
-	}
-	sendableResults := &testrail.SendableResultsForCase{
-		Results: results,
-	}
-	return sendableResults
-}
-
-// TestObjectsToSendableResultsForCase converts TestObjects to sendable results
-func (m *Uploader) testObjectsToSendableResultsForCase(objs []*types.TestMatcher) *testrail.SendableResultsForCase {
-	var results []testrail.ResultsForCase
-
-	for _, o := range objs {
-		result := testrail.ResultsForCase{
-			CaseID: o.ID,
-			SendableResult: testrail.SendableResult{
-				AssignedToID: autotestUserID,
-				StatusID:     statusMap[o.Status],
-				Comment:      "",
-				Version:      "1",
-				Elapsed:      *testrail.TimespanFromDuration(1 * time.Second),
-				Defects:      TicketFromURL(o.IssueURL),
-			},
-		}
-		results = append(results, result)
-	}
-	sendableResults := testrail.SendableResultsForCase{
-		Results: results,
-	}
-	return &sendableResults
-}
-
 func (m Uploader) FormatURL(id int) string {
 	return path.Join(viper.GetString("URL"), "/index.php?/cases/view/", strconv.Itoa(id))
 }
@@ -150,8 +103,11 @@ func (m Uploader) GetCasesWithDescription() types.TestCasesWithDescription {
 	return m.defaultTests
 }
 
-func (m *Uploader) AddTests(objects []*types.TestMatcher) {
+func (m *Uploader) AddTests(objects []*types.TestMatcher, ignoreNonExistent bool) {
 	for _, object := range objects {
+		if _, ok := m.tests[object.ID]; !ok && ignoreNonExistent {
+			continue
+		}
 		m.tests[object.ID] = testrail.SendableResult{
 			AssignedToID: autotestUserID,
 			StatusID:     statusMap[object.Status],

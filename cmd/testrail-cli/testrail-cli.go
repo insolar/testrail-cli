@@ -92,6 +92,6 @@ func main() {
 	filteredObjects := internal.FilterTestObjects(tObjects, t.GetCasesWithDescription(), skipDesc)
 	filteredObjects.LogInvalidTests(t)
 
-	t.AddTests(filteredObjects.Valid)
+	t.AddTests(filteredObjects.Valid, true)
 	t.Upload()
 }

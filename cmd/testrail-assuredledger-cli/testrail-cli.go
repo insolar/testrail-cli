@@ -79,6 +79,6 @@ func main() {
 		}
 	}
 
-	t.AddTests(tObjects)
+	t.AddTests(tObjects, true)
 	t.Upload()
 }
