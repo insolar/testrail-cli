@@ -7,11 +7,11 @@ package qase
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"path"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/antihax/optional"
 	"github.com/spf13/viper"
@@ -23,9 +23,9 @@ import (
 var (
 	autotestUserID = 10
 	statusMap      = map[string]string{
-		types.TestStatusPassed: "1",
-		types.TestStatusFailed: "2",
-		// types.TestStatusSkipped:      6,
+		types.TestStatusPassed:  "passed",
+		types.TestStatusFailed:  "failed",
+		types.TestStatusSkipped: "skipped",
 		// types.TestStatusNotAvailable: 7,
 	}
 )
@@ -41,6 +41,7 @@ func TicketFromURL(url string) string {
 type Uploader struct {
 	c *qClient.APIClient
 
+	runId     int32
 	projectID string
 	suiteID   int32
 	tests     map[int]qClient.ResultCreate
@@ -82,42 +83,57 @@ func (m *Uploader) GetCasesWithDescription() types.TestCasesWithDescription {
 	return casesWithDescription
 }
 
-func (m *Uploader) Init(projectID string, suiteID int32) {
+func (m *Uploader) Init(projectID string, suiteID int32, title string) {
 	ctx := context.Background()
 	m.projectID = projectID
 	m.suiteID = suiteID
 	casesForRun := make([]int64, 0)
-	suiteCases, _, err := m.c.CasesApi.GetCases(ctx, m.projectID,
+
+	// todo fix me! case_id != result_id
+	suiteCases, http, err := m.c.CasesApi.GetCases(ctx, m.projectID,
 		&qClient.CasesApiGetCasesOpts{FiltersSuiteId: optional.NewInt32(m.suiteID)})
+	if http.StatusCode > 204 {
+		log.Fatal("Wrong status code")
+	}
 	if err != nil && suiteCases.Result == nil {
 		log.Fatal(err)
 	}
+
+	suite, _, err := m.c.SuitesApi.GetSuite(ctx, m.projectID, m.suiteID)
+	if err != nil && suite.Result == nil {
+		log.Fatal(err)
+	}
+	if err != nil && suite.Result == nil {
+		log.Fatal(err)
+	}
+
 	for _, c := range suiteCases.Result.Entities {
 		casesForRun = append(casesForRun, c.Id)
 	}
 
+	if len(casesForRun) == 0 {
+		log.Fatal("Cases is empty")
+	}
+
 	run, _, err := m.c.RunsApi.CreateRun(ctx,
 		qClient.RunCreate{
-			Title:      "Automated test run " + time.Now().String(), // todo check
+			Title:      fmt.Sprintf("Backend::%s__%s", suite.Result.Title, title), // todo check
 			Cases:      casesForRun,
 			IsAutotest: true,
 		}, m.projectID)
 	if err != nil && run.Result == nil {
 		log.Fatal(err)
 	}
+	m.runId = int32(run.Result.Id)
 	log.Printf("Created run id = %d", run.Result.Id)
 }
 
-func (m *Uploader) AddTests(objects []*types.TestMatcher, ignoreNonExistent bool) {
+func (m *Uploader) AddTests(objects []*types.TestMatcher) {
 	for _, object := range objects {
-		if _, ok := m.tests[object.ID]; !ok && ignoreNonExistent {
-			continue
-		}
 		// todo посмотреть что постить
 		m.tests[object.ID] = qClient.ResultCreate{
 			CaseId:      int64(object.ID),
-			Case_:       nil,
-			Status:      "",
+			Status:      object.Status,
 			Time:        0,
 			TimeMs:      0,
 			Defect:      false,
@@ -136,7 +152,13 @@ func (m *Uploader) Upload() {
 		bulk.Results = append(bulk.Results, resultForCase)
 	}
 
-	_, _, err := m.c.ResultsApi.CreateResultBulk(ctx, bulk, m.projectID, m.suiteID)
+	resp, http, err := m.c.ResultsApi.CreateResultBulk(ctx, bulk, m.projectID, m.suiteID)
+	if err != nil {
+		log.Printf("Post results fail %s", err)
+		log.Println(resp, http)
+	}
+
+	_, _, err = m.c.RunsApi.CompleteRun(ctx, m.projectID, m.runId)
 	if err != nil {
 		log.Fatal(err)
 	}

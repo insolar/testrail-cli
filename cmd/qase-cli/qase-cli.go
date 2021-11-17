@@ -26,6 +26,7 @@ func main() {
 	viper.SetEnvPrefix("QS")
 	flag.String("API_TOKEN", "", "Qase apiToken")
 	flag.String("FILE", "", "go test json file")
+	flag.String("RUN_NAME", "", "ci qase RunName")
 	flag.String("PROJECT_ID", "", "qase project id")
 	flag.Int("SUITE_ID", 0, "qase suite id")
 	flag.Bool("SKIP-DESC", false, "skip description check")
@@ -37,6 +38,7 @@ func main() {
 
 	var (
 		apiToken  = viper.GetString("API_TOKEN")
+		runName   = viper.GetString("RUN_NAME")
 		projectID = viper.GetString("PROJECT_ID")
 		suiteID   = viper.GetInt32("SUITE_ID")
 		file      = viper.GetString("FILE")
@@ -45,6 +47,9 @@ func main() {
 
 	if apiToken == "" {
 		log.Fatal("provide qase apiToken")
+	}
+	if runName == "" {
+		log.Fatal("provide runName")
 	}
 	if projectID == "" {
 		log.Fatal("provide qase project id")
@@ -82,11 +87,11 @@ func main() {
 	tObjects := matcherInstance.ConvertEventsToMatcherObjects(eventReader)
 
 	t := qase.NewUploader(apiToken)
-	t.Init(projectID, suiteID)
+	t.Init(projectID, suiteID, runName)
 
 	filteredObjects := internal.FilterTestObjects(tObjects, t.GetCasesWithDescription(), skipDesc)
 	filteredObjects.LogInvalidTests(t)
 
-	t.AddTests(filteredObjects.Valid, true)
+	t.AddTests(filteredObjects.Valid)
 	t.Upload()
 }
