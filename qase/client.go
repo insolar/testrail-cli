@@ -7,8 +7,8 @@ package qase
 
 import (
 	"context"
-	"fmt"
 	"log"
+	"net/http"
 	"path"
 	"strconv"
 	"strings"
@@ -21,8 +21,8 @@ import (
 )
 
 var (
-	autotestUserID = 10
-	statusMap      = map[string]string{
+	// autotestUserID = 10
+	statusMap = map[string]string{
 		types.TestStatusPassed:  "passed",
 		types.TestStatusFailed:  "failed",
 		types.TestStatusSkipped: "skipped",
@@ -64,14 +64,14 @@ func (m Uploader) FormatURL(id int) string {
 }
 
 func (m *Uploader) GetCasesWithDescription() types.TestCasesWithDescription {
-	cases, _, err := m.c.CasesApi.GetCases(context.Background(),
+	cases, http, err := m.c.CasesApi.GetCases(context.Background(),
 		m.projectID,
 		&qClient.CasesApiGetCasesOpts{FiltersSuiteId: optional.NewInt32(m.suiteID)})
-	if err != nil {
-		log.Fatal(err)
-	}
+	checkResponse(http, err)
 
-	// todo дописать проверок
+	if cases.Result == nil {
+		log.Fatal("Cases response empty")
+	}
 	var casesWithDescription types.TestCasesWithDescription
 	for _, c := range cases.Result.Entities {
 		caseWithDescription := types.TestCaseWithDescription{
@@ -87,78 +87,73 @@ func (m *Uploader) Init(projectID string, suiteID int32, title string) {
 	ctx := context.Background()
 	m.projectID = projectID
 	m.suiteID = suiteID
-	casesForRun := make([]int64, 0)
 
-	// todo fix me! case_id != result_id
+	// prepare cases for run
 	suiteCases, http, err := m.c.CasesApi.GetCases(ctx, m.projectID,
 		&qClient.CasesApiGetCasesOpts{FiltersSuiteId: optional.NewInt32(m.suiteID)})
-	if http.StatusCode > 204 {
-		log.Fatal("Wrong status code")
-	}
-	if err != nil && suiteCases.Result == nil {
-		log.Fatal(err)
-	}
+	checkResponse(http, err)
 
-	suite, _, err := m.c.SuitesApi.GetSuite(ctx, m.projectID, m.suiteID)
-	if err != nil && suite.Result == nil {
-		log.Fatal(err)
+	casesForRun := make([]int64, 0)
+	if suiteCases.Result != nil {
+		for _, c := range suiteCases.Result.Entities {
+			casesForRun = append(casesForRun, c.Id)
+		}
 	}
-	if err != nil && suite.Result == nil {
-		log.Fatal(err)
-	}
-
-	for _, c := range suiteCases.Result.Entities {
-		casesForRun = append(casesForRun, c.Id)
-	}
-
 	if len(casesForRun) == 0 {
 		log.Fatal("Cases is empty")
 	}
 
+	// create run
 	run, _, err := m.c.RunsApi.CreateRun(ctx,
 		qClient.RunCreate{
-			Title:      fmt.Sprintf("Backend::%s__%s", suite.Result.Title, title), // todo check
+			Title:      title,
 			Cases:      casesForRun,
 			IsAutotest: true,
 		}, m.projectID)
-	if err != nil && run.Result == nil {
-		log.Fatal(err)
+	checkResponse(http, err)
+
+	if run.Result != nil {
+		m.runId = int32(run.Result.Id)
+		log.Printf("Created run id = %d", run.Result.Id)
 	}
-	m.runId = int32(run.Result.Id)
-	log.Printf("Created run id = %d", run.Result.Id)
 }
 
 func (m *Uploader) AddTests(objects []*types.TestMatcher) {
 	for _, object := range objects {
 		// todo посмотреть что постить
 		m.tests[object.ID] = qClient.ResultCreate{
-			CaseId:      int64(object.ID),
-			Status:      object.Status,
-			Time:        0,
-			TimeMs:      0,
-			Defect:      false,
-			Attachments: nil,
-			Stacktrace:  "",
-			Comment:     "Autotest " + object.GoTestName,
+			CaseId: int64(object.ID),
+			Status: object.Status,
+			// Time:        0,
+			// TimeMs:      0,
+			// Defect:      false,
+			// Attachments: nil,
+			// Stacktrace:  "",
+			Comment: "Autotest " + object.GoTestName,
 		}
 	}
 }
 
 func (m *Uploader) Upload() {
 	ctx := context.Background()
-	bulk := qClient.ResultCreateBulk{}
+	results := make([]qClient.ResultCreate, 0)
 
 	for _, resultForCase := range m.tests {
-		bulk.Results = append(bulk.Results, resultForCase)
+		results = append(results, resultForCase)
 	}
 
-	resp, http, err := m.c.ResultsApi.CreateResultBulk(ctx, bulk, m.projectID, m.suiteID)
-	if err != nil {
-		log.Printf("Post results fail %s", err)
-		log.Println(resp, http)
-	}
+	_, http, err := m.c.ResultsApi.CreateResultBulk(ctx, qClient.ResultCreateBulk{Results: results}, m.projectID, m.runId)
+	checkResponse(http, err)
 
 	_, _, err = m.c.RunsApi.CompleteRun(ctx, m.projectID, m.runId)
+	checkResponse(http, err)
+}
+
+func checkResponse(http *http.Response, err error) {
+	if http.StatusCode > 200 {
+		log.Fatal("Unexpected status code")
+		log.Printf("Actual status code: %d", http.StatusCode)
+	}
 	if err != nil {
 		log.Fatal(err)
 	}
