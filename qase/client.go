@@ -26,7 +26,6 @@ var (
 		types.TestStatusPassed:  "passed",
 		types.TestStatusFailed:  "failed",
 		types.TestStatusSkipped: "skipped",
-		// types.TestStatusNotAvailable: 7,
 	}
 )
 
@@ -45,7 +44,6 @@ type Uploader struct {
 	projectID string
 	suiteID   int32
 	tests     map[int]qClient.ResultCreate
-	// defaultTests types.TestCasesWithDescription // todo?
 }
 
 func NewUploader(token string) *Uploader {
@@ -120,16 +118,18 @@ func (m *Uploader) Init(projectID string, suiteID int32, title string) {
 
 func (m *Uploader) AddTests(objects []*types.TestMatcher) {
 	for _, object := range objects {
-		// todo посмотреть что постить
+		comment := "Autotest " + object.GoTestName
+		defect := false
+		if (object.Status == "skipped" || object.Status == "failed") && object.IssueURL != "" {
+			defect = true
+			comment += "; Bug: " + object.IssueURL
+		}
+
 		m.tests[object.ID] = qClient.ResultCreate{
-			CaseId: int64(object.ID),
-			Status: object.Status,
-			// Time:        0,
-			// TimeMs:      0,
-			// Defect:      false,
-			// Attachments: nil,
-			// Stacktrace:  "",
-			Comment: "Autotest " + object.GoTestName,
+			CaseId:  int64(object.ID),
+			Status:  object.Status,
+			Defect:  defect,
+			Comment: comment,
 		}
 	}
 }

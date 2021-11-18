@@ -16,11 +16,17 @@ func TestUploaderQase(t *testing.T) {
 		GoTestName:  "TestUploaderQase",
 	}
 	matcher2 := types.TestMatcher{
-		ID:          2,
-		Status:      "failed",
-		Description: "blabla",
-		GoTestName:  "TestUploaderQase",
+		ID:         2,
+		Status:     "failed",
+		GoTestName: "TestUploaderQase",
+		IssueURL:   "https://soveren.atlassian.net/browse/SMAT-98",
 	}
-	uploader.AddTests([]*types.TestMatcher{&matcher, &matcher2})
+	matcher3 := types.TestMatcher{
+		ID:         3,
+		Status:     "skipped",
+		GoTestName: "TestUploaderQase",
+		IssueURL:   "https://soveren.atlassian.net/browse/SMAT-98",
+	}
+	uploader.AddTests([]*types.TestMatcher{&matcher, &matcher2, &matcher3})
 	uploader.Upload()
 }
